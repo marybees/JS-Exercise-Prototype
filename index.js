@@ -127,14 +127,21 @@ Car.prototype.fill = function(gallons) {
   return (this.tank += gallons);
 };
 
-
 Car.prototype.drive = function(distance) {
-  while (this.tank > 0) {
-    return (this.odometer += distance) && (this.tank -= distance / this.milesPerGallon)
-  } if (this.tank === 0) {
-    return `I ran out of fuel at ${this.odometer} miles!`;
+  if (this.tank > 0 && distance > 0) {
+    this.odometer += distance;
+    distance = this.milesPerGallon * this.tank;
+    this.tank = distance / this.milesPerGallon;
+    this.tank = Math.abs(this.tank);
+    if (this.tank === 0) {
+      this.tank = 0;
+      return `I ran out of fuel at ${this.odometer} miles!`;
+    }
   }
 };
+
+// odometer increases by distance travelled
+// distance travelled is determined by miles per gallon * gallons
 
 const batmobile = new Car("BatMobile", 20);
 
@@ -143,7 +150,7 @@ batmobile.fill(10);
 
 console.log(batmobile.tank);
 
-batmobile.drive(100);
+batmobile.drive(201);
 
 console.log(batmobile.odometer);
 
